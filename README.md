@@ -1,6 +1,6 @@
 # STAT 405 - Bayesian Statistics Project
 
-## Reading the data
+## Reading The Data
 
 The dataset `full_data.csv` is included in the repository. If you need to regenerate 
 it from scratch using the `f1dataR` package, use the following code (note this takes a long time to run):
@@ -34,3 +34,6 @@ full_data <- map_dfr(2019:2024, function(year) {
 
 write_csv(full_data, "full_data.csv")
 ```
+
+## Report
+https://github.com/ShahrukhP15/F1_grid_bayesian_inference/blob/main/report.pdf
