@@ -43,7 +43,7 @@ suppressPackageStartupMessages(library(f1dataR))
 #   })
 # })
 # 
-# write_csv(full_data, "full_data.csv")
+# write_csv(full_data, "../data/full_data.csv")
 
 ```
 
@@ -51,7 +51,7 @@ suppressPackageStartupMessages(library(f1dataR))
 ```{r load-data}
 ## Loading and preprocessing data
 
-data <- read.csv("full_data.csv")
+data <- read.csv("../data/full_data.csv")
 
 convert_to_seconds <- function(x) {
   if (is.numeric(x)) return(x)
@@ -185,18 +185,18 @@ points(data$grid, data$gap, col = "#a93226", pch = 1, cex = 0.8)
 ```{r fit-mcmc, warning=FALSE, message=FALSE, results='hide'}
 # hierarchical Stan model and fit using MCMC with 5 chains
 
-dir.create(file.path("stan_out_hierarchical"), showWarnings = FALSE)
+dir.create(file.path("../stan_out_hierarchical"), showWarnings = FALSE)
 
 grid_pred_pos    <- 10
 circuit_pred_pos <- 1
 
-mod_hierarchical <- cmdstan_model("hierarchical_model_exp.stan")
+mod_hierarchical <- cmdstan_model("../stan/hierarchical_model_exp.stan")
 
 fit_hierarchical <- mod_hierarchical$sample(
   seed          = 1,
   chains        = 5,
   refresh       = 0,
-  output_dir    = "stan_out_hierarchical",
+  output_dir    = "../stan_out_hierarchical",
   data          = list(
     N            = N_obs,
     J            = N_circuits,
@@ -221,7 +221,7 @@ fit_hierarchical_vi <- mod_hierarchical$variational(
   refresh          = 0,
   show_messages    = FALSE,
   show_exceptions  = FALSE,
-  output_dir       = "stan_out_hierarchical",
+  output_dir       = "../stan_out_hierarchical",
   algorithm        = "fullrank",
   output_samples   = 1000,
   data             = list(
@@ -276,7 +276,7 @@ for (i in 1:length(validation_obs)) {
   mcmc_results = mod_hierarchical$sample(
     seed             = 1,
     data             = train_test_dta,
-    output_dir       = "stan_out_hierarchical",
+    output_dir       = "../stan_out_hierarchical",
     refresh          = 0,
     show_messages    = FALSE,
     show_exceptions  = FALSE,
@@ -326,7 +326,7 @@ for (i in 1:length(validation_obs)) {
   vi_results = mod_hierarchical$variational(
     seed           = 1,
     data           = train_test_dta,
-    output_dir     = "stan_out_hierarchical",
+    output_dir     = "../stan_out_hierarchical",
     refresh        = 0,
     show_messages  = FALSE,
     show_exceptions = FALSE,
@@ -359,32 +359,32 @@ mean(merged_data_hier_var$Inside_CI)
 
 ```{r trace-mcmc}
 # Trace plots for global and circuit-level parameters to assess MCMC mixing
-dir.create("plots/trace_plots_Hierarchical", recursive = TRUE, showWarnings = FALSE)
+dir.create("../figures/hierarchical_model/trace_plots", recursive = TRUE, showWarnings = FALSE)
 
 p1 <- mcmc_trace(fit_hierarchical$draws("alpha")) +
   theme_minimal() +
   labs(title = "Trace plot: alpha (MCMC) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_alpha.png", p1, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_alpha.png", p1, width = 8, height = 4)
 
 p2 <- mcmc_trace(fit_hierarchical$draws("mu_beta")) +
   theme_minimal() +
   labs(title = "Trace plot: mu_beta (MCMC) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_mu_beta.png", p2, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_mu_beta.png", p2, width = 8, height = 4)
 
 p3 <- mcmc_trace(fit_hierarchical$draws("sigma_beta")) +
   theme_minimal() +
   labs(title = "Trace plot: sigma_beta (MCMC) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_sigma_beta.png", p3, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_sigma_beta.png", p3, width = 8, height = 4)
 
 p4 <- mcmc_trace(fit_hierarchical$draws("beta_j[1]")) +
   theme_minimal() +
   labs(title = "Trace plot: beta_j[1] (MCMC) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_beta_j1.png", p4, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_beta_j1.png", p4, width = 8, height = 4)
 
 p5 <- mcmc_trace(fit_hierarchical$draws("beta_j[6]")) +
   theme_minimal() +
   labs(title = "Trace plot: beta_j[6] (MCMC) — Hierarchical")
-  ggsave("plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_beta_j6.png", p5, width = 8, height = 4)
+  ggsave("../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_beta_j6.png", p5, width = 8, height = 4)
 
 p1; p2; p3; p4; p5
 ```
@@ -394,75 +394,75 @@ p1; p2; p3; p4; p5
 p6 <- mcmc_trace(fit_hierarchical_vi$draws("alpha")) +
   theme_minimal() +
   labs(title = "Trace plot: alpha (VI) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_vi_Hierarchical_alpha.png", p6, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_alpha.png", p6, width = 8, height = 4)
 
 p7 <- mcmc_trace(fit_hierarchical_vi$draws("mu_beta")) +
   theme_minimal() +
   labs(title = "Trace plot: mu_beta (VI) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_vi_Hierarchical_mu_beta.png", p7, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_mu_beta.png", p7, width = 8, height = 4)
 
 p8 <- mcmc_trace(fit_hierarchical_vi$draws("sigma_beta")) +
   theme_minimal() +
   labs(title = "Trace plot: sigma_beta (VI) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_vi_Hierarchical_sigma_beta.png", p8, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_sigma_beta.png", p8, width = 8, height = 4)
 
 p9 <- mcmc_trace(fit_hierarchical_vi$draws("beta_j[1]")) +
   theme_minimal() +
   labs(title = "Trace plot: beta_j[1] (VI) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_vi_Hierarchical_beta_j1.png", p9, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_beta_j1.png", p9, width = 8, height = 4)
 
 p10 <- mcmc_trace(fit_hierarchical_vi$draws("beta_j[6]")) +
   theme_minimal() +
   labs(title = "Trace plot: beta_j[6] (VI) — Hierarchical")
-ggsave("plots/trace_plots_Hierarchical/trace_vi_Hierarchical_beta_j6.png", p10, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_beta_j6.png", p10, width = 8, height = 4)
 
 p6; p7; p8; p9; p10
 ```
 ```{r rank-histograms-mcmc}
 # Rank histograms for MCMC to assess uniform mixing across chains
-dir.create("plots/rank_histograms_Hierarchical", recursive = TRUE, showWarnings = FALSE)
+dir.create("../figures/hierarchical_model/rank_histograms", recursive = TRUE, showWarnings = FALSE)
 
 r1 <- mcmc_rank_hist(fit_hierarchical$draws("alpha")) +
   ylab("Number of MCMC samples with these ranks") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Rank histogram: alpha (MCMC) — Hierarchical")
-ggsave("plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_alpha.png", r1, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_alpha.png", r1, width = 8, height = 4)
 
 r2 <- mcmc_rank_hist(fit_hierarchical$draws("mu_beta")) +
   ylab("Number of MCMC samples with these ranks") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Rank histogram: mu_beta (MCMC) — Hierarchical")
-ggsave("plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_mu_beta.png", r2, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_mu_beta.png", r2, width = 8, height = 4)
 
 r3 <- mcmc_rank_hist(fit_hierarchical$draws("sigma_beta")) +
   ylab("Number of MCMC samples with these ranks") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Rank histogram: sigma_beta (MCMC) — Hierarchical")
-ggsave("plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_sigma_beta.png", r3, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_sigma_beta.png", r3, width = 8, height = 4)
 
 r4 <- mcmc_rank_hist(fit_hierarchical$draws("beta_j[1]")) +
   ylab("Number of MCMC samples with these ranks") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Rank histogram: beta_j[1] (MCMC) — Hierarchical")
-ggsave("plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_beta_j1.png", r4, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_beta_j1.png", r4, width = 8, height = 4)
 
 r5 <- mcmc_rank_hist(fit_hierarchical$draws("beta_j[6]")) +
   ylab("Number of MCMC samples with these ranks") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Rank histogram: beta_j[6] (MCMC) — Hierarchical")
-ggsave("plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_beta_j6.png", r5, width = 8, height = 4)
+ggsave("../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_beta_j6.png", r5, width = 8, height = 4)
 
 r1; r2; r3; r4; r5
 ```
 
 ```{r posterior-scatter}
 # Posterior scatter plot of alpha vs mu_beta colored by log posterior
-dir.create("plots/posterior_Hierarchical", recursive = TRUE, showWarnings = FALSE)
+dir.create("../figures/hierarchical_model/posterior", recursive = TRUE, showWarnings = FALSE)
 
 hier_draws_df <- fit_hierarchical$draws(format = "df")
 
@@ -477,14 +477,14 @@ s1 <- ggplot(hier_draws_df,
     color = "log posterior"
   ) +
   theme_classic()
-ggsave("plots/posterior_Hierarchical/posterior_scatter_Hierarchical.png", s1, width = 8, height = 6)
+ggsave("../figures/hierarchical_model/posterior/posterior_scatter_Hierarchical.png", s1, width = 8, height = 6)
 
 s1
 ```
 
 ```{r ppc}
 # Posterior predictive check — observed vs predicted gap density
-dir.create("plots/ppc_Hierarchical", recursive = TRUE, showWarnings = FALSE)
+dir.create("../figures/hierarchical_model/ppc", recursive = TRUE, showWarnings = FALSE)
 
 plot(density(data$gap),
      main = "Posterior predictive check — Hierarchical",
@@ -575,7 +575,7 @@ for (i in 1:length(validation_obs_debug)) {
   mcmc_results_debug = mod_hierarchical$sample(
     seed             = i,
     data             = train_test_debug_dta,
-    output_dir       = "stan_out_hierarchical",
+    output_dir       = "../stan_out_hierarchical",
     refresh          = 0,
     show_messages    = FALSE,
     show_exceptions  = FALSE,
@@ -638,7 +638,7 @@ for (i in 1:100) {
     refresh         = 0,
     show_messages   = FALSE,
     show_exceptions = FALSE,
-    output_dir      = "stan_out_hierarchical",
+    output_dir      = "../stan_out_hierarchical",
     chains          = 1,
     iter_warmup     = 50,
     iter_sampling   = 50,
@@ -667,7 +667,7 @@ ks.test(initial_dist_df$mu_beta, final_dist_df$mu_beta)
 
 ```{r mcmc-vi-comparison}
 # Compare MCMC and VI credible intervals side by side
-dir.create("plots/comparison_Hierarchical", recursive = TRUE, showWarnings = FALSE)
+dir.create("../figures/hierarchical_model/comparison", recursive = TRUE, showWarnings = FALSE)
 
 merged_data_hier$method     = "mcmc"
 merged_data_hier_var$method = "vi"
@@ -693,7 +693,7 @@ c1 <- combined_merged_data_hier |>
   labs(title = "Posterior Predictive Credible Intervals — Hierarchical",
        x = "Grid", y = "Gap")
 
-ggsave("plots/comparison_Hierarchical/mcmc_vi_comparison_Hierarchical.png",
+ggsave("../figures/hierarchical_model/comparison/mcmc_vi_comparison_Hierarchical.png",
        c1, width = 8, height = 8)
 
 c1
@@ -701,7 +701,7 @@ c1
 
 ```{r shrinkage-plot}
 # Shrinkage plot showing partial pooling of circuit-specific slopes towards population mean
-dir.create("plots/shrinkage_Hierarchical", recursive = TRUE, showWarnings = FALSE)
+dir.create("../figures/hierarchical_model/shrinkage", recursive = TRUE, showWarnings = FALSE)
 
 beta_j_means <- fit_hierarchical$summary(
   paste0("beta_j[", 1:N_circuits, "]"), "mean"
@@ -740,7 +740,7 @@ s2 <- ggplot(shrinkage_df) +
        x     = "Beta (grid effect)",
        y     = "Circuit")
 
-ggsave("plots/shrinkage_Hierarchical/shrinkage_plot_Hierarchical.png",
+ggsave("../figures/hierarchical_model/shrinkage/shrinkage_plot_Hierarchical.png",
        s2, width = 8, height = 10)
 
 s2
@@ -762,29 +762,29 @@ h1 <- data.frame(
   labs(title = "Posterior predictive distributions — Hierarchical",
        x = "Gap predictions (seconds)", y = "Count")
 
-ggsave("plots/comparison_Hierarchical/mcmc_vi_histogram_Hierarchical.png",
+ggsave("../figures/hierarchical_model/comparison/mcmc_vi_histogram_Hierarchical.png",
        h1, width = 8, height = 5)
 
 h1
 ```
 
 ```{r save-summaries}
-# Save MCMC and VI summary tables for key parameters to outputs folder
-dir.create(file.path("outputs"), showWarnings = FALSE)
+# Save MCMC and VI summary tables for key parameters to results folder
+dir.create("../results", showWarnings = FALSE)
 
 summary_mcmc_df <- fit_hierarchical$summary(NULL, c("mean", "sd", "rhat", "mcse_mean", "ess_bulk"))
 summary_mcmc_df <- summary_mcmc_df[summary_mcmc_df$variable %in% c("alpha", "mu_beta", "sigma_beta"), ]
-write.csv(summary_mcmc_df, "outputs/summary_mcmc_hier_df.csv", row.names = FALSE)
+write.csv(summary_mcmc_df, "../results/summary_mcmc_hier_df.csv", row.names = FALSE)
 
 summary_vi_df <- fit_hierarchical_vi$summary(NULL, c("mean", "sd", "mcse_mean", "ess_bulk"))
 summary_vi_df <- summary_vi_df[summary_vi_df$variable %in% c("alpha", "mu_beta", "sigma_beta"), ]
-write.csv(summary_vi_df, "outputs/summary_vi_hier_df.csv", row.names = FALSE)
+write.csv(summary_vi_df, "../results/summary_vi_hier_df.csv", row.names = FALSE)
 ```
 
 ```{r read-summaries}
 # Read and display saved summary tables
-summary_mcmc_hier <- read.csv("outputs/summary_mcmc_hier_df.csv")
-summary_vi_hier   <- read.csv("outputs/summary_vi_hier_df.csv")
+summary_mcmc_hier <- read.csv("../results/summary_mcmc_hier_df.csv")
+summary_vi_hier   <- read.csv("../results/summary_vi_hier_df.csv")
 
 summary_mcmc_hier
 summary_vi_hier

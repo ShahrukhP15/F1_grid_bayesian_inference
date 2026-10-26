@@ -1,6 +1,6 @@
 ---
 title: "Effect of Grid Position on Race Time Gap"
-author: "Shahrukh Islam Prithibi (47610068), Khue Do (70790423)"
+author: "Shahrukh Islam Prithibi, Khue Do"
 date: "2026-04-02"
 output: pdf_document
 header-includes:
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Github Link
 
-<https://github.com/khuedo22/stat-405-final-project.git>
+<https://github.com/ShahrukhP15/F1_grid_bayesian_inference>
 
 
 ## Background
@@ -75,11 +75,11 @@ This places 68% of prior mass for $\alpha$ in $[-3.5, -1.5]$ and for $\beta$ in 
 This model was implemented by **Metropolis-Hastings MCMC** and **variational inference (VI)**.
 
 ```{r mcmc_results, echo=FALSE}
-read.csv("outputs/summary_exp_df.csv")
+read.csv("../results/summary_exp_df.csv")
 ```
 
 ```{r vi_results, echo=FALSE}
-read.csv("outputs/summary_vi_df.csv")
+read.csv("../results/summary_vi_df.csv")
 ```
 
 
@@ -150,11 +150,11 @@ instead, as $\mu_\beta$, $\sigma_\beta$, and the 31 circuit-specific $\beta_j$'s
 are strongly correlated, requiring a richer variational family.
 
 ```{r hier_mcmc_results, echo=FALSE}
-read.csv("outputs/summary_mcmc_hier_df.csv")
+read.csv("../results/summary_mcmc_hier_df.csv")
 ```
 
 ```{r hier_vi_results, echo=FALSE}
-read.csv("outputs/summary_vi_hier_df.csv")
+read.csv("../results/summary_vi_hier_df.csv")
 ```
 
 ### Diagnostics
@@ -309,13 +309,13 @@ across modeling approaches and written components.
 ## Appendix
 
 ### A.1 Gap Distribution
-![](outputs/gap_hist.png)
+![](../figures/eda/gap_hist.png)
 
 ### A.2 Relationship between Grid and Gap
-![](outputs/grid_v_gap.png)
-![](outputs/loess.png)
-![](outputs/heatmap.png)
-![](outputs/sample_size_circuit.png)
+![](../figures/eda/grid_v_gap.png)
+![](../figures/eda/loess.png)
+![](../figures/eda/heatmap.png)
+![](../figures/eda/sample_size_circuit.png)
 
 ## Appendix B — Model 1
 
@@ -355,79 +355,79 @@ generated quantities {
 
 ### B.2 Prior Predictive Check
 
-![](outputs/prior_check.png)
+![](../figures/simple_model/prior_check.png)
 
 ### B.3 Trace Plots (MCMC)
 
-![](outputs/exp_alpha_trace.png)
-![](outputs/exp_beta_trace.png)
+![](../figures/simple_model/exp_alpha_trace.png)
+![](../figures/simple_model/exp_beta_trace.png)
 
 ### B.4 Rank Histograms
 
-![](outputs/exp_alpha_rank.png)
-![](outputs/exp_beta_rank.png)
+![](../figures/simple_model/exp_alpha_rank.png)
+![](../figures/simple_model/exp_beta_rank.png)
 
 ### B.5 Trace Plots (VI)
 
-![](outputs/vi_alpha_trace.png)
-![](outputs/vi_beta_trace.png)
+![](../figures/simple_model/vi_alpha_trace.png)
+![](../figures/simple_model/vi_beta_trace.png)
 
 ### B.6 Calibration — MCMC
 
-![](outputs/exp_calibration.png)
+![](../figures/simple_model/exp_calibration.png)
 
 ### B.7 Calibration — VI
 
-![](outputs/vi_calibration.png)
+![](../figures/simple_model/vi_calibration.png)
 
 ### B.8 Debugging — Calibration Intervals on Simulated Data
 
 MCMC
 
-![](outputs/simulated_data_calibration_exp.png)
+![](../figures/simple_model/simulated_data_calibration_exp.png)
 
 VI
 
-![](outputs/simulated_data_calibration_vi.png)
+![](../figures/simple_model/simulated_data_calibration_vi.png)
 
 ### B.9 Exact Invariance Test
 
-![](outputs/initial_dist.png)
+![](../figures/simple_model/initial_dist.png)
 Final
 
-![](outputs/final_dist.png)
+![](../figures/simple_model/final_dist.png)
 
 ### B.10 Posterior Predictive Check
 
 MCMC
 
-![](outputs/model_against_data_exp.png)
+![](../figures/simple_model/model_against_data_exp.png)
 
 VI
 
-![](outputs/model_against_data_vi.png)
+![](../figures/simple_model/model_against_data_vi.png)
 
 MCMC
 
-![](outputs/posterior_check_density_exp.png)
+![](../figures/simple_model/posterior_check_density_exp.png)
 
 VI
 
-![](outputs/posterior_check_density_vi.png)
+![](../figures/simple_model/posterior_check_density_vi.png)
 
 MCMC
 
-![](outputs/posterior_check_exp.png)
+![](../figures/simple_model/posterior_check_exp.png)
 
 VI
 
-![](outputs/posterior_check_vi.png)
+![](../figures/simple_model/posterior_check_vi.png)
 
 ### B.11 MCMC vs VI
 
-![](outputs/hist_comparison.png)
-![](outputs/scatter_plot_comparison.png)
-![](outputs/preds_plot_comparison.png)
+![](../figures/simple_model/hist_comparison.png)
+![](../figures/simple_model/scatter_plot_comparison.png)
+![](../figures/simple_model/preds_plot_comparison.png)
 ## Appendix C — Model 2
 
 ### C.1 Stan Code
@@ -469,52 +469,52 @@ generated quantities {
 
 ### C.2 Prior Predictive Check
 
-![](plots/ppc_Hierarchical/prior_predictive_check_Hierarchical.png)
+![](../figures/hierarchical_model/ppc/prior_predictive_check_Hierarchical.png)
 
 ### C.3 Trace Plots (MCMC)
 
-![](plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_alpha.png)
-![](plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_mu_beta.png)
-![](plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_sigma_beta.png)
-![](plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_beta_j1.png)
-![](plots/trace_plots_Hierarchical/trace_mcmc_Hierarchical_beta_j6.png)
+![](../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_alpha.png)
+![](../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_mu_beta.png)
+![](../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_sigma_beta.png)
+![](../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_beta_j1.png)
+![](../figures/hierarchical_model/trace_plots/trace_mcmc_Hierarchical_beta_j6.png)
 
 ### C.4 Trace Plots (VI)
 
-![](plots/trace_plots_Hierarchical/trace_vi_Hierarchical_alpha.png)
-![](plots/trace_plots_Hierarchical/trace_vi_Hierarchical_mu_beta.png)
-![](plots/trace_plots_Hierarchical/trace_vi_Hierarchical_sigma_beta.png)
-![](plots/trace_plots_Hierarchical/trace_vi_Hierarchical_beta_j1.png)
-![](plots/trace_plots_Hierarchical/trace_vi_Hierarchical_beta_j6.png)
+![](../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_alpha.png)
+![](../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_mu_beta.png)
+![](../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_sigma_beta.png)
+![](../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_beta_j1.png)
+![](../figures/hierarchical_model/trace_plots/trace_vi_Hierarchical_beta_j6.png)
 
 ### C.5 Rank Histograms
 
-![](plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_alpha.png)
-![](plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_mu_beta.png)
-![](plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_sigma_beta.png)
-![](plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_beta_j1.png)
-![](plots/rank_histograms_Hierarchical/rank_mcmc_Hierarchical_beta_j6.png)
+![](../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_alpha.png)
+![](../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_mu_beta.png)
+![](../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_sigma_beta.png)
+![](../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_beta_j1.png)
+![](../figures/hierarchical_model/rank_histograms/rank_mcmc_Hierarchical_beta_j6.png)
 
 ### C.6 Calibration — MCMC
 
-![](plots/hierarchical_calibrations/h_mcmc.png)
+![](../figures/hierarchical_model/calibration/h_mcmc.png)
 
 ### C.7 Calibration — VI
 
-![](plots/hierarchical_calibrations/h_VI.png)
+![](../figures/hierarchical_model/calibration/h_VI.png)
 
 ### C.8 Posterior Predictive Check
 
-![](plots/ppc_Hierarchical/ppc_hierarchical.png)
+![](../figures/hierarchical_model/ppc/ppc_hierarchical.png)
 
 ### C.9 Shrinkage Plot
 
-![](plots/shrinkage_Hierarchical/shrinkage_plot_Hierarchical.png)
+![](../figures/hierarchical_model/shrinkage/shrinkage_plot_Hierarchical.png)
 
 ### C.10 Posterior Scatter
 
-![](plots/posterior_Hierarchical/posterior_scatter_Hierarchical.png)
+![](../figures/hierarchical_model/posterior/posterior_scatter_Hierarchical.png)
 
 ### C.11 Comparison
 
-![](plots/comparison_Hierarchical/mcmc_vi_histogram_Hierarchical.png)
+![](../figures/hierarchical_model/comparison/mcmc_vi_histogram_Hierarchical.png)

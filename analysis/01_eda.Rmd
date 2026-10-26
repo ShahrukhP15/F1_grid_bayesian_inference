@@ -44,9 +44,9 @@ library(tidyverse)
 #   })
 # })
 
-# write_csv(full_data, "full_data.csv")
+# write_csv(full_data, "../data/full_data.csv")
 
-full_data <- read.csv("full_data.csv")
+full_data <- read.csv("../data/full_data.csv")
 
 head(full_data, 8)
 ```

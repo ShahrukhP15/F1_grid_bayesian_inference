@@ -4,3 +4,6 @@
 .Ruserdata
 stan_out_hierarchical/
 stan_out/
+# compiled Stan binaries (rebuilt automatically by cmdstanr)
+stan/*
+!stan/*.stan
