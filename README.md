@@ -6,7 +6,7 @@ Does starting further back on the grid cost a Formula 1 driver more time at the 
 
 **Result:** doubling a driver's grid position increases their expected gap to the race winner by about **1.6 times**. The effect varies modestly but really by circuit, from about 1.5 times at Hockenheimring to 1.75 times at Sochi.
 
-📄 **Full report:** [report/report.pdf](report/report.pdf)
+📄 **Full report:** [report](report/report.pdf)
 
 ## Project structure
 
